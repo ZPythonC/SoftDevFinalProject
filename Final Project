@@ -1,0 +1,76 @@
+from breezypythongui import EasyFrame
+import tkinter
+class window(EasyFrame):
+    def __init__(self):
+        #Initialize Window
+        EasyFrame.__init__(self, title = "Calorie Counter")
+        #Set Heading
+        self.heading = self.addLabel(text = "Welcome to Calorie Counter!", row = 0, column = 2, columnspan = 4)
+        #Input Height
+        self.lheight = self.addLabel(text = "Height: ", row = 1, column = 0)
+        #Choose Inches or Centimeters
+        self.length = self.addRadiobuttonGroup(row = 1, column = 1)
+        self.lIn = self.length.addRadiobutton(text = "Inches")
+        self.lCm = self.length.addRadiobutton(text = "Centimeters")
+        self.height = self.addTextField(text = "", row = 1, column = 2)
+        #Input Weight
+        self.lweight = self.addLabel(text = "Weight: ", row = 2, column = 0)
+        #Choose Pounds or Kilograms
+        self.density = self.addRadiobuttonGroup(row = 2, column = 1)
+        self.dLb = self.density.addRadiobutton(text = "Pounds")
+        self.dKg = self.density.addRadiobutton(text = "Kilograms")
+        self.weight = self.addTextField(text = "", row = 2, column = 2)
+        #Select Gender
+        self.lgender = self.addLabel(text = "Gender: ", row = 3, column = 0)
+        #Choose Male or Female
+        self.gender = self.addRadiobuttonGroup(row = 3, column = 1)
+        self.gM = self.gender.addRadiobutton(text = "Male")
+        self.gF = self.gender.addRadiobutton(text = "Female")
+        #Input Weight Goal
+        self.lwgoal = self.addLabel(text = "Weight Goal: ", row = 4, column = 0)
+        #Choose Pounds or Kilograms
+        self.wgoal = self.addRadiobuttonGroup(row = 4, column = 1)
+        self.wLb = self.wgoal.addRadiobutton(text = "Pounds")
+        self.wKg = self.wgoal.addRadiobutton(text = "Kilograms")
+        self.weightgoal = self.addTextField(text = "", row = 4, column = 2)
+        #Add a button to Enter settings and go to the next window (Add condition that all fields must be filled out first, disable otherwise.)
+        self.next1 = self.addButton(text = "Next", row = 5, column = 2)
+#Create a new window for Exercise input
+        #Create a loop to take multiple exercise inputs and save inputs to a tuple list or three parallel arrays.
+        #Input Exercise Type
+        self.lextype = self.addLabel(text = "Exercise Type: ", row = 1, column = 3)
+        self.extype = self.addTextField(text = "", row = 1, column = 4)
+        #Input Exercise Duration
+        self.led = self.addLabel(text = "Exercise Duration: ", row = 2, column = 3)
+        self.edtime = self.addTextField(text = "", row = 2, column = 4)
+        #Input Calories Burned
+        self.lcalBurn = self.addLabel(text = "Calories Burned: ", row = 3, column = 3)
+        self.calBurn = self.addTextField(text = "", row = 3, column = 4)
+        #Add a button to Enter exercises and go to the next window
+        self.next2 = self.addButton(text = "Next", row = 5, column = 4)
+#Create a new window for Food input
+        #Create a loop to take multiple exercise inputs and save inputs to a tuple list or two parallel arrays.
+        #Input Food Eaten
+        self.lfood = self.addLabel(text = "Food Eaten: ", row = 1, column = 5)
+        self.food = self.addTextField(text = "", row = 1, column = 6)
+        #Input Calories Gained
+        self.lcalGain = self.addLabel(text = "Calories Gained: ", row = 2, column = 5)
+        self.calGain = self.addTextField(text = "", row = 2, column = 6)
+        #Add a button to Enter food and go to the final window.
+        self.next3 = self.addButton(text = "Next", row = 5, column = 6)
+# Create a method that calculates weight loss based on the Settings, Food, and Exercise variables.
+def weightLoss():
+    #Call Settings:
+    #Call Food:
+    #Call exercise:
+    #Take return value and calculate total calories gained or lost, then convert to total weight gained or lost:
+    totalCalories = 1
+    weightChange = 1
+#Create a final window and print two charts, one for exercise and one for food.
+#Print total calories and wieght gained or lost.
+
+#Define main function
+def main():
+    window().mainloop()
+#Run Program
+main()
