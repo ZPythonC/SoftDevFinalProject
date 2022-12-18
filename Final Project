@@ -1,74 +1,203 @@
+#Import needed modules.
 from breezypythongui import EasyFrame
-import tkinter
+from tkinter import *
+#Define the class all functions will be defined within.
 class window(EasyFrame):
+    #Define initialization function.
     def __init__(self):
         #Initialize Window
-        EasyFrame.__init__(self, title = "Calorie Counter")
+        self.frame1 = EasyFrame.__init__(self, title = "Calorie Counter")
         #Set Heading
-        self.heading = self.addLabel(text = "Welcome to Calorie Counter!", row = 0, column = 2, columnspan = 4)
+        self.warning = self.addLabel(text = "Please fill in all fields.", row = 0, column = 0)
+        self.heading = self.addLabel(text = "Welcome to Calorie Counter!", row = 0, column = 2)
         #Input Height
         self.lheight = self.addLabel(text = "Height: ", row = 1, column = 0)
         #Choose Inches or Centimeters
         self.length = self.addRadiobuttonGroup(row = 1, column = 1)
         self.lIn = self.length.addRadiobutton(text = "Inches")
+        self.length.setSelectedButton(self.lIn)
         self.lCm = self.length.addRadiobutton(text = "Centimeters")
-        self.height = self.addTextField(text = "", row = 1, column = 2)
+        self.height = self.addIntegerField(value = 0, row = 1, column = 2)
         #Input Weight
         self.lweight = self.addLabel(text = "Weight: ", row = 2, column = 0)
         #Choose Pounds or Kilograms
         self.density = self.addRadiobuttonGroup(row = 2, column = 1)
         self.dLb = self.density.addRadiobutton(text = "Pounds")
+        self.density.setSelectedButton(self.dLb)
         self.dKg = self.density.addRadiobutton(text = "Kilograms")
-        self.weight = self.addTextField(text = "", row = 2, column = 2)
+        self.weight = self.addFloatField(value = 0, row = 2, column = 2)
         #Select Gender
         self.lgender = self.addLabel(text = "Gender: ", row = 3, column = 0)
         #Choose Male or Female
         self.gender = self.addRadiobuttonGroup(row = 3, column = 1)
         self.gM = self.gender.addRadiobutton(text = "Male")
+        self.gender.setSelectedButton(self.gM)
         self.gF = self.gender.addRadiobutton(text = "Female")
-        #Input Weight Goal
-        self.lwgoal = self.addLabel(text = "Weight Goal: ", row = 4, column = 0)
-        #Choose Pounds or Kilograms
-        self.wgoal = self.addRadiobuttonGroup(row = 4, column = 1)
-        self.wLb = self.wgoal.addRadiobutton(text = "Pounds")
-        self.wKg = self.wgoal.addRadiobutton(text = "Kilograms")
-        self.weightgoal = self.addTextField(text = "", row = 4, column = 2)
-        #Add a button to Enter settings and go to the next window (Add condition that all fields must be filled out first, disable otherwise.)
-        self.next1 = self.addButton(text = "Next", row = 5, column = 2)
-#Create a new window for Exercise input
-        #Create a loop to take multiple exercise inputs and save inputs to a tuple list or three parallel arrays.
+        #Input Age
+        self.lage = self.addLabel(text = "Age: ", row = 4, column = 0)
+        self.age = self.addIntegerField(value = 0, row = 4, column = 1)
+        #Store input and open second window.
+        self.stick = self.addButton(text = "Store", row = 5, column = 2, command = self.save)
+        self.next1 = self.addButton(text = "Next", row = 5, column = 3, command = self.open1)
+        self.exit1 = self.addButton(text = "Exit", row = 5, column = 4, command = self.exit)
+    def exit(self):
+        quit()
+    def save(self):
+        self.stick["state"] = "disabled"
+        self.height["state"] = "disabled"
+        self.weight["state"] = "disabled"
+        self.age["state"] = "disabled"
+        self.lIn["state"] = "disabled"
+        self.lCm["state"] = "disabled"
+        self.dLb["state"] = "disabled"
+        self.dKg["state"] = "disabled"
+        self.gM["state"] = "disabled"
+        self.gF["state"] = "disabled"
+        #Store input.
+        self.height = self.height.getNumber()
+        self.weight = self.weight.getNumber()
+        self.age = self.age.getNumber()
+        self.length = self.length.getSelectedButton()["text"]
+        self.density = self.density.getSelectedButton()["text"]
+        self.gender = self.gender.getSelectedButton()["text"]
+        # Design a calculation for how settings affect calorie burn based on Jeor's equation.
+        if self.density == "Pounds":
+            self.weight = self.weight * .454
+        if self.length == "Inches":
+            self.height = self.height * 2.54
+        if self.gender == "Male":
+            self.Jeor = 5
+        else:
+            self.Jeor = -161
+        self.meta = 9.99 * self.weight + 6.25 * self.height - 4.92 * self.age + self.Jeor
+        #Add variable for total calories burned.
+        self.totalburn = 0
+    def open1(self):
+        #Disable previous next button and all input fields.
+        self.next1["state"] = "disabled"
+        #Open second window.
+        self.frame2 = EasyFrame.__init__(self, title = "Page 2")
+        #Crete three arrays for exercise input.
+        self.Ex1 = []
+        self.Ex2 = []
+        self.Ex3 = []
+        #Create a loop to take multiple exercise inputs and save inputs to three parallel arrays.
         #Input Exercise Type
-        self.lextype = self.addLabel(text = "Exercise Type: ", row = 1, column = 3)
-        self.extype = self.addTextField(text = "", row = 1, column = 4)
+        self.lextype = self.addLabel(text = "Exercise Type: ", row = 0, column = 0)
+        self.extype = self.addTextField(text = "", row = 0, column = 1)
         #Input Exercise Duration
-        self.led = self.addLabel(text = "Exercise Duration: ", row = 2, column = 3)
-        self.edtime = self.addTextField(text = "", row = 2, column = 4)
+        self.led = self.addLabel(text = "Exercise Duration: ", row = 1, column = 0)
+        self.extime = self.addIntegerField(value = 0, row = 1, column = 1)
         #Input Calories Burned
-        self.lcalBurn = self.addLabel(text = "Calories Burned: ", row = 3, column = 3)
-        self.calBurn = self.addTextField(text = "", row = 3, column = 4)
-        #Add a button to Enter exercises and go to the next window
-        self.next2 = self.addButton(text = "Next", row = 5, column = 4)
-#Create a new window for Food input
-        #Create a loop to take multiple exercise inputs and save inputs to a tuple list or two parallel arrays.
+        self.lcalBurn = self.addLabel(text = "Calories Burned: ", row = 2, column = 0)
+        self.calBurn = self.addIntegerField(value = 0, row = 2, column = 1)
+        #Store input and add counter as to how many stacks entered.
+        self.x = 0
+        self.lcount = self.addLabel(text = "Stacks entered: ", row = 3, column = 0)
+        self.count = self.addLabel(text = self.x, row = 3, column = 1)
+        self.stack = self.addButton(text = "Store", row = 3, column = 2, command = self.Store)
+        #Open third window.
+        self.next2 = self.addButton(text = "Next", row = 3, column = 3, command = self.open2)
+        self.exit2 = self.addButton(text = "Exit", row = 3, column = 4, command = self.exit)
+    def Store(self):
+        #Add input to arrays.
+        self.Ex1.append(self.extype.getText())
+        self.Ex2.append(self.extime.getNumber())
+        self.Ex3.append(self.calBurn.getNumber())
+        #Add total calories burned.
+        self.totalburn += self.calBurn.getNumber()
+        #Reset input fields for next entry.
+        self.extype = self.addTextField(text = "", row = 0, column = 1)
+        self.extime = self.addIntegerField(value = 0, row = 1, column = 1)
+        self.calBurn = self.addIntegerField(value = 0, row = 2, column = 1)
+        #Increase and display counter.
+        self.x += 1
+        self.count = self.addLabel(text = self.x, row = 3, column = 1)
+        #Create two parrallel arrays for Food input.
+        self.Meal1 = []
+        self.Meal2 = []
+    def open2(self):
+        #Disable previous next button and all input fields.
+        self.next2["state"] = "disabled"
+        self.stack["state"] = "disabled"
+        self.extype["state"] = "disabled"
+        self.extime["state"] = "disabled"
+        self.calBurn["state"] = "disabled"
+        self.frame3 = EasyFrame.__init__(self, title = "Food")
+        #Add counter variable.
+        self.y = 0
+        #Create a loop to take multiple exercise inputs and save input to two parallel arrays.
         #Input Food Eaten
-        self.lfood = self.addLabel(text = "Food Eaten: ", row = 1, column = 5)
-        self.food = self.addTextField(text = "", row = 1, column = 6)
+        self.lfood = self.addLabel(text = "Food Eaten: ", row = 0, column = 0)
+        self.food = self.addTextField(text = "", row = 0, column = 1)
         #Input Calories Gained
-        self.lcalGain = self.addLabel(text = "Calories Gained: ", row = 2, column = 5)
-        self.calGain = self.addTextField(text = "", row = 2, column = 6)
-        #Add a button to Enter food and go to the final window.
-        self.next3 = self.addButton(text = "Next", row = 5, column = 6)
-# Create a method that calculates weight loss based on the Settings, Food, and Exercise variables.
-def weightLoss():
-    #Call Settings:
-    #Call Food:
-    #Call exercise:
-    #Take return value and calculate total calories gained or lost, then convert to total weight gained or lost:
-    totalCalories = 1
-    weightChange = 1
-#Create a final window and print two charts, one for exercise and one for food.
-#Print total calories and wieght gained or lost.
-
+        self.lcalGain = self.addLabel(text = "Calories Gained: ", row = 1, column = 0)
+        self.calGain = self.addIntegerField(value = 0, row = 1, column = 1)
+        #Add labels for counter variable.
+        self.lcount2 = self.addLabel(text = "Stacks entered: ", row = 2, column = 0)
+        self.count2 = self.addLabel(text = self.y, row = 2, column = 1)
+        #Create button to store data.
+        self.store = self.addButton(text = "Store", row = 2, column = 1, command = self.keep)
+        #Open fourth window.
+        self.next3 = self.addButton(text = "Next", row = 2, column = 2, command = self.open3)
+        self.exit3 = self.addButton(text = "Exit", row = 2, column = 3, command = self.exit)
+        #Initialize variable for toatal calories gained.
+        self.totalgain = 0
+    def keep(self):
+        #Store food data.
+        self.Meal1.append(self.food.getText())
+        self.Meal2.append(self.calGain.getNumber())
+        #Modify totalgain counter.
+        self.totalgain += self.calGain.getNumber()
+        #Reset input fields.
+        self.food = self.addTextField(text = "", row = 0, column = 1)
+        self.calGain = self.addIntegerField(value = 0, row = 1, column = 1)
+        #Increase and display counter.
+        self.y += 1
+        self.count2 = self.addLabel(text = self.y, row = 2, column = 1)
+    def open3(self):
+        #Disable previous next button and all input fields.
+        self.next3["state"] = "disabled"
+        self.store["state"] = "disabled"
+        self.food["state"] = "disabled"
+        self.calGain["state"] = "disabled"
+        #Open forth window.
+        self.frame4 = EasyFrame.__init__(self, title = "Results")
+        #Add counter for Exercise chart position.
+        z = 1
+        self.im1 = PhotoImage(file = "exercise.gif")
+        self.imageLabel = self.addLabel(text = "", row = 0, column = 0, sticky = "NSEW")
+        self.imageLabel ["image"] = self.im1
+        self.im2 = PhotoImage(file = "food.gif")
+        self.imageLabel2 = self.addLabel(text = "", row = 0, column = 4)
+        self.imageLabel2 ["image"] = self.im2
+        #Print Exercise chart using Exercise arrays.
+        for i in range(len(self.Ex1)):
+            self.place = self.addLabel(text = "Exercise:", row = 0, column = 1)
+            self.place6 = self.addLabel(text = self.Ex1[i], row = z, column = 1)
+            self.place2 = self.addLabel(text = "Duration:", row = 0, column = 2)
+            self.place7 = self.addLabel(text = self.Ex2[i], row = z, column = 2)
+            self.place3 = self.addLabel(text = "Calories Burned", row = 0, column = 3)
+            self.place8 = self.addLabel(text = self.Ex3[i], row = z, column = 3)
+            #Increase counter.
+            z += 1
+        #Add counter for Food chart position.
+        a = 1
+        #Print Food chart using Food arrays.
+        for i in range(len(self.Meal1)):
+            self.place4 = self.addLabel(text = "Food:", row = 0, column = 5)
+            self.place9 = self.addLabel(text = self.Meal1[i], row = a, column = 5)
+            self.place5 = self.addLabel(text = "Calories:", row = 0, column = 6)
+            self.place10 = self.addLabel(text = self.Meal2[i], row = a, column = 6)
+            #Increase counter.
+            a += 1
+        #Print total calories lost and gained.
+        self.totalburn += self.meta
+        self.place11 = self.addLabel(text = "Total Calories Lost:", row = a, column = 1)
+        self.place12 = self.addLabel(text = round(self.totalburn, 2), row = a, column = 2)
+        self.place13 = self.addLabel(text = "Total Calories Gained:", row = a, column = 4)
+        self.place14 = self.addLabel(text = self.totalgain, row = a, column = 5)
+        self.exit4 = self.addButton(text = "Exit", row = a + 1, column = 5, command = self.exit)
 #Define main function
 def main():
     window().mainloop()
